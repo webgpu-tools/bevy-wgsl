@@ -49,7 +49,7 @@ struct DrawIndirectArgs {
 const CENTIMETERS_PER_METER = 100.0;
 
 @if(MESHLET_FILL_CLUSTER_BUFFERS_PASS)
-var<push_constant> scene_instance_count: u32;
+var<immediate> scene_instance_count: u32;
 @if(MESHLET_FILL_CLUSTER_BUFFERS_PASS)
 @group(0) @binding(0) var<storage, read> meshlet_instance_meshlet_counts: array<u32>; // Per entity instance
 @if(MESHLET_FILL_CLUSTER_BUFFERS_PASS)
@@ -64,7 +64,7 @@ var<push_constant> scene_instance_count: u32;
 @if(MESHLET_CULLING_PASS)
 struct Constants { scene_cluster_count: u32, meshlet_raster_cluster_rightmost_slot: u32 }
 @if(MESHLET_CULLING_PASS)
-var<push_constant> constants: Constants;
+var<immediate> constants: Constants;
 @if(MESHLET_CULLING_PASS)
 @group(0) @binding(0) var<storage, read> meshlet_cluster_meshlet_ids: array<u32>; // Per cluster
 @if(MESHLET_CULLING_PASS)
