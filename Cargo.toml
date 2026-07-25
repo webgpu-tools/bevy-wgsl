@@ -1,18 +1,18 @@
-[workspace]
-members = ["examples/consumer", "examples/builder"]
-resolver = "3"
-
 [package]
 name = "bevy-wgsl"
-description = "Bevy WESL shaders"
 version = "0.1.0"
 edition = "2024"
+description = "Bevy WESL shaders"
+
+[workspace]
+resolver = "3"
+members = ["examples/builder", "examples/consumer"]
 
 [dependencies]
 wesl = { version = "0.4.0", features = ["naga-ext"] }
 
 [build-dependencies]
-wesl = { version = "0.4.0", features = ["package", "naga-ext", "eval"] }
+wesl = { version = "0.4.0", features = ["eval", "naga-ext", "package"] }
 
 [patch.crates-io]
 wesl = { path = "../wesl-rs/crates/wesl" }

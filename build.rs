@@ -1,5 +1,5 @@
 fn main() {
-    wesl::PkgBuilder::new("bevy")
+    wesl::PackageBuilder::new("bevy")
         .scan_root("src/shaders/bevy")
         .expect("failed to scan WESL files")
         .validate()
