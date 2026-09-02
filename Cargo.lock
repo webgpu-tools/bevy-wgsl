@@ -52,7 +52,7 @@ checksum = "3a8241f3ebb85c056b509d4327ad0358fbbba6ffb340bf388f26350aeda225b1"
 name = "bevy-wgsl"
 version = "0.1.0"
 dependencies = [
- "wesl",
+ "wesl-core",
 ]
 
 [[package]]
@@ -878,6 +878,11 @@ dependencies = [
  "wgsl-parse",
  "wgsl-types",
 ]
+
+[[package]]
+name = "wesl-core"
+version = "0.1.0"
+dependencies = []
 
 [[package]]
 name = "wesl-macros"

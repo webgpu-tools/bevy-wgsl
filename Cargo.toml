@@ -9,10 +9,11 @@ resolver = "3"
 members = ["examples/builder", "examples/consumer"]
 
 [dependencies]
-wesl = { version = "0.4.0", features = ["naga-ext"] }
+wesl-core = { version = "0.1.0" }
 
 [build-dependencies]
 wesl = { version = "0.4.0", features = ["eval", "naga-ext", "package"] }
 
 [patch.crates-io]
 wesl = { path = "../wesl-rs/crates/wesl" }
+wesl-core = { path = "../wesl-rs/crates/wesl-core" }
