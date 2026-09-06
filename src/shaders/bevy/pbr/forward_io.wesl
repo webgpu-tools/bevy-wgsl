@@ -1,4 +1,4 @@
-struct Vertex {
+public struct Vertex {
     @builtin(instance_index) instance_index: u32,
     @if(VERTEX_POSITIONS)
     @location(0) position: vec3<f32>,
@@ -20,7 +20,7 @@ struct Vertex {
     @builtin(vertex_index) index: u32,
 };
 
-struct VertexOutput {
+public struct VertexOutput {
     // This is `clip position` when the struct is used as a vertex stage output
     // and `frag coord` when used as a fragment stage input
     @builtin(position) position: vec4<f32>,
@@ -40,6 +40,6 @@ struct VertexOutput {
     @location(7) @interpolate(flat) visibility_range_dither: i32,
 }
 
-struct FragmentOutput {
+public struct FragmentOutput {
     @location(0) color: vec4<f32>,
 }

@@ -1,4 +1,4 @@
-struct Atmosphere {
+public struct Atmosphere {
     // Radius of the planet
     bottom_radius: f32, // units: m
 
@@ -20,7 +20,7 @@ struct Atmosphere {
     ozone_absorption: vec3<f32>, // ozone absorption. units: m^-1
 }
 
-struct AtmosphereSettings {
+public struct AtmosphereSettings {
     transmittance_lut_size: vec2<u32>,
     multiscattering_lut_size: vec2<u32>,
     sky_view_lut_size: vec2<u32>,
@@ -37,7 +37,7 @@ struct AtmosphereSettings {
 
 // "Atmosphere space" is just the view position with y=0 and oriented horizontally,
 // so the horizon stays a horizontal line in our luts
-struct AtmosphereTransforms {
+public struct AtmosphereTransforms {
     world_from_atmosphere: mat4x4<f32>,
     atmosphere_from_world: mat4x4<f32>,
 }

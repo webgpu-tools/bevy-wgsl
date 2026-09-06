@@ -34,13 +34,13 @@ import package::pbr::mesh_view_bindings;
 import package::render::maths;
 
 @if(!CLUSTERED_DECALS_ARE_USABLE)
-const module_requires_flag_CLUSTERED_DECALS_ARE_USABLE = false;
+public const module_requires_flag_CLUSTERED_DECALS_ARE_USABLE = false;
 @if(!CLUSTERED_DECALS_ARE_USABLE)
 const_assert module_requires_flag_CLUSTERED_DECALS_ARE_USABLE; // module requires feature flag CLUSTERED_DECALS_ARE_USABLE
 
 // An object that allows stepping through all clustered decals that affect a
 // single fragment.
-struct ClusteredDecalIterator {
+public struct ClusteredDecalIterator {
     // Public fields follow:
     // The index of the decal texture in the binding array.
     texture_index: i32,
@@ -70,7 +70,7 @@ struct ClusteredDecalIterator {
 //          clustered_forward::fragment_cluster_index(frag_coord, view_z, is_orthographic);
 //      var clusterable_object_index_ranges =
 //          clustered_forward::unpack_clusterable_object_index_ranges(cluster_index);
-fn clustered_decal_iterator_new(
+public fn clustered_decal_iterator_new(
     world_position: vec3<f32>,
     clusterable_object_index_ranges: ptr<function, ClusterableObjectIndexRanges>
 ) -> ClusteredDecalIterator {
@@ -91,7 +91,7 @@ fn clustered_decal_iterator_new(
 //
 // Returns true if another decal was found or false if no more decals were found
 // for this position.
-fn clustered_decal_iterator_next(iterator: ptr<function, ClusteredDecalIterator>) -> bool {
+public fn clustered_decal_iterator_next(iterator: ptr<function, ClusteredDecalIterator>) -> bool {
     if ((*iterator).decal_index_offset == (*iterator).end_offset) {
         return false;
     }
@@ -123,7 +123,7 @@ fn clustered_decal_iterator_next(iterator: ptr<function, ClusteredDecalIterator>
 
 
 // Returns the view-space Z coordinate for the given world position.
-fn get_view_z(world_position: vec3<f32>) -> f32 {
+public fn get_view_z(world_position: vec3<f32>) -> f32 {
     return dot(vec4<f32>(
         mesh_view_bindings::view.view_from_world[0].z,
         mesh_view_bindings::view.view_from_world[1].z,
@@ -134,7 +134,7 @@ fn get_view_z(world_position: vec3<f32>) -> f32 {
 
 // Returns true if the current view describes an orthographic projection or
 // false otherwise.
-fn view_is_orthographic() -> bool {
+public fn view_is_orthographic() -> bool {
     return mesh_view_bindings::view.clip_from_view[3].w == 1.0;
 }
 
@@ -146,7 +146,7 @@ fn view_is_orthographic() -> bool {
 // 
 // TODO(mbr): I feature-gated this.
 // It used to work without the CLUSTERED_DECALS_ARE_USABLE flag.
-fn apply_decal_base_color(
+public fn apply_decal_base_color(
     world_position: vec3<f32>,
     frag_coord: vec2<f32>,
     initial_base_color: vec4<f32>,

@@ -12,7 +12,7 @@ import package::pbr::clustered_forward::ClusterableObjectIndexRanges;
 // https://advances.realtimerendering.com/s2006/Mitchell-ShadingInValvesSourceEngine.pdf
 // Slide 28, "Ambient Cube Basis"
 @if(IRRADIANCE_VOLUMES_ARE_USABLE)
-fn irradiance_volume_light(
+public fn irradiance_volume_light(
     world_position: vec3<f32>,
     N: vec3<f32>,
     clusterable_object_index_ranges: ptr<function, ClusterableObjectIndexRanges>,

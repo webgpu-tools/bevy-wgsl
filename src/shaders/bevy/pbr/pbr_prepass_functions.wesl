@@ -14,10 +14,10 @@ import package::pbr::{
 import package::pbr::pbr_bindings::material_indices;
 
 // Cutoff used for the premultiplied alpha modes BLEND, ADD, and ALPHA_TO_COVERAGE.
-const PREMULTIPLIED_ALPHA_CUTOFF = 0.05;
+public const PREMULTIPLIED_ALPHA_CUTOFF = 0.05;
 
 // We can use a simplified version of alpha_discard() here since we only need to handle the alpha_cutoff
-fn prepass_alpha_discard(in: VertexOutput) {
+public fn prepass_alpha_discard(in: VertexOutput) {
     @if(!MAY_DISCARD)
     return;
 
@@ -90,7 +90,7 @@ fn prepass_alpha_discard(in: VertexOutput) {
 }
 
 @if(MOTION_VECTOR_PREPASS)
-fn calculate_motion_vector(world_position: vec4<f32>, previous_world_position: vec4<f32>) -> vec2<f32> {
+public fn calculate_motion_vector(world_position: vec4<f32>, previous_world_position: vec4<f32>) -> vec2<f32> {
     let clip_position_t = view.unjittered_clip_from_world * world_position;
     let clip_position = clip_position_t.xy / clip_position_t.w;
     let previous_clip_position_t = previous_view_uniforms.clip_from_world * previous_world_position;

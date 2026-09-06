@@ -2,7 +2,7 @@
 
 
 // Per-frame data that the CPU supplies to the GPU.
-struct MeshInput {
+public struct MeshInput {
     // The model transform.
     world_from_local: mat3x4<f32>,
     // The lightmap UV rect, packed into 64 bits.
@@ -26,7 +26,7 @@ struct MeshInput {
 // The `wgpu` indirect parameters structure. This is a union of two structures.
 // For more information, see the corresponding comment in
 // `gpu_preprocessing.rs`.
-struct IndirectParametersIndexed {
+public struct IndirectParametersIndexed {
     // `vertex_count` or `index_count`.
     index_count: u32,
     // `instance_count` in both structures.
@@ -39,19 +39,19 @@ struct IndirectParametersIndexed {
     first_instance: u32,
 }
 
-struct IndirectParametersNonIndexed {
+public struct IndirectParametersNonIndexed {
     vertex_count: u32,
     instance_count: u32,
     base_vertex: u32,
     first_instance: u32,
 }
 
-struct IndirectParametersCpuMetadata {
+public struct IndirectParametersCpuMetadata {
     base_output_index: u32,
     batch_set_index: u32,
 }
 
-struct IndirectParametersGpuMetadata {
+public struct IndirectParametersGpuMetadata {
     mesh_index: u32,
 @if(WRITE_INDIRECT_PARAMETERS_METADATA)
     early_instance_count: atomic<u32>,
@@ -62,7 +62,7 @@ struct IndirectParametersGpuMetadata {
 // #endif  // WRITE_INDIRECT_PARAMETERS_METADATA
 }
 
-struct IndirectBatchSet {
+public struct IndirectBatchSet {
     indirect_parameters_count: atomic<u32>,
     indirect_parameters_base: u32,
 }

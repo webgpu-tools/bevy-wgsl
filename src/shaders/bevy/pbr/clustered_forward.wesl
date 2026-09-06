@@ -13,7 +13,7 @@ import package::render::{
 // These offsets must be monotonically nondecreasing. That is, indices are
 // always sorted into the following order: point lights, spot lights, reflection
 // probes, irradiance volumes.
-struct ClusterableObjectIndexRanges {
+public struct ClusterableObjectIndexRanges {
     // The offset of the index of the first point light.
     first_point_light_index_offset: u32,
     // The offset of the index of the first spot light, which also terminates
@@ -32,7 +32,7 @@ struct ClusterableObjectIndexRanges {
 }
 
 // NOTE: Keep in sync with bevy/pbr/src/light.rs
-fn view_z_to_z_slice(view_z: f32, is_orthographic: bool) -> u32 {
+public fn view_z_to_z_slice(view_z: f32, is_orthographic: bool) -> u32 {
     var z_slice: u32 = 0u;
     if is_orthographic {
         // NOTE: view_z is correct in the orthographic case
@@ -46,7 +46,7 @@ fn view_z_to_z_slice(view_z: f32, is_orthographic: bool) -> u32 {
     return min(z_slice, bindings::lights.cluster_dimensions.z - 1u);
 }
 
-fn fragment_cluster_index(frag_coord: vec2<f32>, view_z: f32, is_orthographic: bool) -> u32 {
+public fn fragment_cluster_index(frag_coord: vec2<f32>, view_z: f32, is_orthographic: bool) -> u32 {
     let xy = vec2<u32>(floor((frag_coord - bindings::view.viewport.xy) * bindings::lights.cluster_factors.xy));
     let z_slice = view_z_to_z_slice(view_z, is_orthographic);
     // NOTE: Restricting cluster index to avoid undefined behavior when accessing uniform buffer
@@ -58,14 +58,14 @@ fn fragment_cluster_index(frag_coord: vec2<f32>, view_z: f32, is_orthographic: b
 }
 
 // this must match CLUSTER_COUNT_SIZE in light.rs
-const CLUSTER_COUNT_SIZE = 9u;
+public const CLUSTER_COUNT_SIZE = 9u;
 
 // Returns the indices of clusterable objects belonging to the given cluster.
 //
 // Note that if fewer than 3 SSBO bindings are available (in WebGL 2,
 // primarily), light probes aren't clustered, and therefore both light probe
 // index ranges will be empty.
-fn unpack_clusterable_object_index_ranges(cluster_index: u32) -> ClusterableObjectIndexRanges {
+public fn unpack_clusterable_object_index_ranges(cluster_index: u32) -> ClusterableObjectIndexRanges {
     @if(AVAILABLE_STORAGE_BUFFER_BINDINGS__GE_3) {
         let offset_and_counts_a = bindings::cluster_offsets_and_counts.data[cluster_index][0];
         let offset_and_counts_b = bindings::cluster_offsets_and_counts.data[cluster_index][1];
@@ -117,7 +117,7 @@ fn unpack_clusterable_object_index_ranges(cluster_index: u32) -> ClusterableObje
 //
 // Note that, in the case of a light probe, the index refers to an element in
 // one of the two `light_probes` sublists, not the `clusterable_objects` list.
-fn get_clusterable_object_id(index: u32) -> u32 {
+public fn get_clusterable_object_id(index: u32) -> u32 {
     @if(AVAILABLE_STORAGE_BUFFER_BINDINGS__GE_3) {
         return bindings::clusterable_object_index_lists.data[index];
     }
@@ -131,7 +131,7 @@ fn get_clusterable_object_id(index: u32) -> u32 {
     }
 }
 
-fn cluster_debug_visualization(
+public fn cluster_debug_visualization(
     input_color: vec4<f32>,
     view_z: f32,
     is_orthographic: bool,

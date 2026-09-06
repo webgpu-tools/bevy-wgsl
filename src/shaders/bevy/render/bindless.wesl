@@ -1,5 +1,5 @@
 @if(!BINDLESS)
-const module_requires_flag_BINDLESS = false;
+public const module_requires_flag_BINDLESS = false;
 @if(!BINDLESS)
 const_assert module_requires_flag_BINDLESS; // module requires feature flag BINDLESS
 
@@ -18,20 +18,20 @@ const_assert module_requires_flag_BINDLESS; // module requires feature flag BIND
 
 // Binding 0 is the bindless index table.
 // Filtering samplers.
-@group(2) @binding(1) var bindless_samplers_filtering: binding_array<sampler>;
+@group(2) @binding(1) public var bindless_samplers_filtering: binding_array<sampler>;
 // Non-filtering samplers (nearest neighbor).
-@group(2) @binding(2) var bindless_samplers_non_filtering: binding_array<sampler>;
+@group(2) @binding(2) public var bindless_samplers_non_filtering: binding_array<sampler>;
 // Comparison samplers (typically for shadow mapping).
-@group(2) @binding(3) var bindless_samplers_comparison: binding_array<sampler>;
+@group(2) @binding(3) public var bindless_samplers_comparison: binding_array<sampler>;
 // 1D textures.
-@group(2) @binding(4) var bindless_textures_1d: binding_array<texture_1d<f32>>;
+@group(2) @binding(4) public var bindless_textures_1d: binding_array<texture_1d<f32>>;
 // 2D textures.
-@group(2) @binding(5) var bindless_textures_2d: binding_array<texture_2d<f32>>;
+@group(2) @binding(5) public var bindless_textures_2d: binding_array<texture_2d<f32>>;
 // 2D array textures.
-@group(2) @binding(6) var bindless_textures_2d_array: binding_array<texture_2d_array<f32>>;
+@group(2) @binding(6) public var bindless_textures_2d_array: binding_array<texture_2d_array<f32>>;
 // 3D textures.
-@group(2) @binding(7) var bindless_textures_3d: binding_array<texture_3d<f32>>;
+@group(2) @binding(7) public var bindless_textures_3d: binding_array<texture_3d<f32>>;
 // Cubemap textures.
-@group(2) @binding(8) var bindless_textures_cube: binding_array<texture_cube<f32>>;
+@group(2) @binding(8) public var bindless_textures_cube: binding_array<texture_cube<f32>>;
 // Cubemap array textures.
-@group(2) @binding(9) var bindless_textures_cube_array: binding_array<texture_cube_array<f32>>;
+@group(2) @binding(9) public var bindless_textures_cube_array: binding_array<texture_cube_array<f32>>;

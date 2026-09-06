@@ -5,12 +5,12 @@ import package::pbr::mesh_view_bindings::environment_map_uniform;
 import package::pbr::lighting::{F_Schlick_vec, LightingInput, LayerLightingInput, LAYER_BASE, LAYER_CLEARCOAT};
 import package::pbr::clustered_forward::ClusterableObjectIndexRanges;
 
-struct EnvironmentMapLight {
+public struct EnvironmentMapLight {
     diffuse: vec3<f32>,
     specular: vec3<f32>,
 };
 
-struct EnvironmentMapRadiances {
+public struct EnvironmentMapRadiances {
     irradiance: vec3<f32>,
     radiance: vec3<f32>,
 }
@@ -21,7 +21,7 @@ struct EnvironmentMapRadiances {
 
 
 @if(MULTIPLE_LIGHT_PROBES_IN_ARRAY)
-fn compute_radiances(
+public fn compute_radiances(
     input: LayerLightingInput,
     clusterable_object_index_ranges: ptr<function, ClusterableObjectIndexRanges>,
     world_position: vec3<f32>,
@@ -100,7 +100,7 @@ fn compute_radiances(
 
 
 @else
-fn compute_radiances(
+public fn compute_radiances(
     input: LayerLightingInput,
     clusterable_object_index_ranges: ptr<function, ClusterableObjectIndexRanges>,
     world_position: vec3<f32>,
@@ -169,7 +169,7 @@ fn compute_radiances(
 // Adds the environment map light from the clearcoat layer to that of the base
 // layer.
 @if(STANDARD_MATERIAL_CLEARCOAT)
-fn environment_map_light_clearcoat(
+public fn environment_map_light_clearcoat(
     out: ptr<function, EnvironmentMapLight>,
     input: ptr<function, LightingInput>,
     clusterable_object_index_ranges: ptr<function, ClusterableObjectIndexRanges>,
@@ -200,7 +200,7 @@ fn environment_map_light_clearcoat(
     (*out).specular = (*out).specular * inv_Fc * inv_Fc + clearcoat_radiances.radiance * Fc;
 }
 
-fn environment_map_light(
+public fn environment_map_light(
     input: ptr<function, LightingInput>,
     clusterable_object_index_ranges: ptr<function, ClusterableObjectIndexRanges>,
     found_diffuse_indirect: bool,
@@ -267,7 +267,7 @@ fn environment_map_light(
 
 // "Moving Frostbite to Physically Based Rendering 3.0", listing 22
 // https://seblagarde.wordpress.com/wp-content/uploads/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf#page=70
-fn radiance_sample_direction(N: vec3<f32>, R: vec3<f32>, roughness: f32) -> vec3<f32> {
+public fn radiance_sample_direction(N: vec3<f32>, R: vec3<f32>, roughness: f32) -> vec3<f32> {
     let smoothness = saturate(1.0 - roughness);
     let lerp_factor = smoothness * (sqrt(smoothness) + roughness);
     return mix(N, R, lerp_factor);

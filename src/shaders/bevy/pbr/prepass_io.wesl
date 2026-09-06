@@ -1,6 +1,6 @@
 // Most of these attributes are not used in the default prepass fragment shader, but they are still needed so we can
 // pass them to custom prepass shaders like pbr_prepass.wgsl.
-struct Vertex {
+public struct Vertex {
     @builtin(instance_index) instance_index: u32,
     @location(0) position: vec3<f32>,
 
@@ -28,7 +28,7 @@ struct Vertex {
     @builtin(vertex_index) index: u32,
 }
 
-struct VertexOutput {
+public struct VertexOutput {
     // This is `clip position` when the struct is used as a vertex stage output
     // and `frag coord` when used as a fragment stage input
     @builtin(position) position: vec4<f32>,
@@ -62,7 +62,7 @@ struct VertexOutput {
 }
 
 @if(PREPASS_FRAGMENT)
-struct FragmentOutput {
+public struct FragmentOutput {
     @if(NORMAL_PREPASS)
     @location(0) normal: vec4<f32>,
 

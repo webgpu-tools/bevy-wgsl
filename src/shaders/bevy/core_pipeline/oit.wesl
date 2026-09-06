@@ -1,12 +1,12 @@
 import package::pbr::mesh_view_bindings::{view, oit_layers, oit_layer_ids, oit_settings};
 
 @if(!OIT_ENABLED)
-const module_requires_flag_OIT_ENABLED = false;
+public const module_requires_flag_OIT_ENABLED = false;
 @if(!OIT_ENABLED)
 const_assert module_requires_flag_OIT_ENABLED; // module requires feature flag OIT_ENABLED
 
 // Add the fragment to the oit buffer
-fn oit_draw(position: vec4f, color: vec4f) {
+public fn oit_draw(position: vec4f, color: vec4f) {
     // Don't add fully transparent fragments to the list
     // because we don't want to have to sort them in the resolve pass
     if color.a < oit_settings.alpha_threshold {
@@ -36,13 +36,13 @@ fn oit_draw(position: vec4f, color: vec4f) {
     oit_layers[layer_index] = vec2(rgb9e5_color, depth_alpha);
 }
 
-fn pack_24bit_depth_8bit_alpha(depth: f32, alpha: f32) -> u32 {
+public fn pack_24bit_depth_8bit_alpha(depth: f32, alpha: f32) -> u32 {
     let depth_bits = u32(saturate(depth) * f32(0xFFFFFFu) + 0.5);
     let alpha_bits = u32(saturate(alpha) * f32(0xFFu) + 0.5);
     return (depth_bits & 0xFFFFFFu) | ((alpha_bits & 0xFFu) << 24u);
 }
 
-fn unpack_24bit_depth_8bit_alpha(packed: u32) -> vec2<f32> {
+public fn unpack_24bit_depth_8bit_alpha(packed: u32) -> vec2<f32> {
     let depth_bits = packed & 0xFFFFFFu;
     let alpha_bits = (packed >> 24u) & 0xFFu;
     return vec2(f32(depth_bits) / f32(0xFFFFFFu), f32(alpha_bits) / f32(0xFFu));

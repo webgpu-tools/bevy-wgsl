@@ -1,4 +1,4 @@
-struct ColorGrading {
+public struct ColorGrading {
     balance: mat3x3<f32>,
     saturation: vec3<f32>,
     contrast: vec3<f32>,
@@ -11,7 +11,7 @@ struct ColorGrading {
     post_saturation: f32,
 }
 
-struct View {
+public struct View {
     clip_from_world: mat4x4<f32>,
     unjittered_clip_from_world: mat4x4<f32>,
     world_from_clip: mat4x4<f32>,

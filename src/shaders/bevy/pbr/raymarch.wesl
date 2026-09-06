@@ -24,14 +24,14 @@ import package::pbr::view_transformations::{
 };
 
 // Allows us to sample from the depth buffer with bilinear filtering.
-@group(1) @binding(2) var depth_linear_sampler: sampler;
+@group(1) @binding(2) public var depth_linear_sampler: sampler;
 
 // Allows us to sample from the depth buffer with nearest-neighbor filtering.
-@group(1) @binding(3) var depth_nearest_sampler: sampler;
+@group(1) @binding(3) public var depth_nearest_sampler: sampler;
 
 // Main code
 
-struct HybridRootFinder {
+public struct HybridRootFinder {
     linear_steps: u32,
     bisection_steps: u32,
     use_secant: bool,
@@ -42,7 +42,7 @@ struct HybridRootFinder {
     max_t: f32,
 }
 
-fn hybrid_root_finder_new_with_linear_steps(v: u32) -> HybridRootFinder {
+public fn hybrid_root_finder_new_with_linear_steps(v: u32) -> HybridRootFinder {
     var res: HybridRootFinder;
     res.linear_steps = v;
     res.bisection_steps = 0u;
@@ -54,7 +54,7 @@ fn hybrid_root_finder_new_with_linear_steps(v: u32) -> HybridRootFinder {
     return res;
 }
 
-fn hybrid_root_finder_find_root(
+public fn hybrid_root_finder_find_root(
     root_finder: ptr<function, HybridRootFinder>,
     start: vec3<f32>,
     end: vec3<f32>,
@@ -188,7 +188,7 @@ fn hybrid_root_finder_find_root(
     }
 }
 
-struct DistanceWithPenetration {
+public struct DistanceWithPenetration {
     /// Distance to the surface of which a root we're trying to find
     distance: f32,
 
@@ -201,7 +201,7 @@ struct DistanceWithPenetration {
     penetration: f32,
 }
 
-struct DepthRaymarchDistanceFn {
+public struct DepthRaymarchDistanceFn {
     depth_tex_size: vec2<f32>,
 
     march_behind_surfaces: bool,
@@ -210,7 +210,7 @@ struct DepthRaymarchDistanceFn {
     use_sloppy_march: bool,
 }
 
-fn depth_raymarch_distance_fn_evaluate(
+public fn depth_raymarch_distance_fn_evaluate(
     distance_fn: ptr<function, DepthRaymarchDistanceFn>,
     ray_point_cs: vec3<f32>,
 ) -> DistanceWithPenetration {
@@ -273,7 +273,7 @@ fn depth_raymarch_distance_fn_evaluate(
     return res;
 }
 
-struct DepthRayMarchResult {
+public struct DepthRayMarchResult {
     /// True if the raymarch hit something.
     hit: bool,
 
@@ -300,7 +300,7 @@ struct DepthRayMarchResult {
     hit_penetration_frac: f32,
 }
 
-struct DepthRayMarch {
+public struct DepthRayMarch {
     /// Number of steps to be taken at regular intervals to find an initial intersection.
     /// Must not be zero.
     linear_steps: u32,
@@ -364,7 +364,7 @@ struct DepthRayMarch {
     depth_tex_size: vec2<f32>,
 }
 
-fn depth_ray_march_new_from_depth(depth_tex_size: vec2<f32>) -> DepthRayMarch {
+public fn depth_ray_march_new_from_depth(depth_tex_size: vec2<f32>) -> DepthRayMarch {
     var res: DepthRayMarch;
     res.jitter = 1.0;
     res.linear_steps = 4u;
@@ -377,7 +377,7 @@ fn depth_ray_march_new_from_depth(depth_tex_size: vec2<f32>) -> DepthRayMarch {
     return res;
 }
 
-fn depth_ray_march_to_cs_dir_impl(
+public fn depth_ray_march_to_cs_dir_impl(
     raymarch: ptr<function, DepthRayMarch>,
     dir_cs: vec4<f32>,
     infinite: bool,
@@ -416,14 +416,14 @@ fn depth_ray_march_to_cs_dir_impl(
 }
 
 /// March from a clip-space position (w = 1)
-fn depth_ray_march_from_cs(raymarch: ptr<function, DepthRayMarch>, v: vec3<f32>) {
+public fn depth_ray_march_from_cs(raymarch: ptr<function, DepthRayMarch>, v: vec3<f32>) {
     (*raymarch).ray_start_cs = v;
 }
 
 /// March to a clip-space position (w = 1)
 ///
 /// Must be called after `from_cs`, as it will clip the world-space ray to the view frustum.
-fn depth_ray_march_to_cs(raymarch: ptr<function, DepthRayMarch>, end_cs: vec3<f32>) {
+public fn depth_ray_march_to_cs(raymarch: ptr<function, DepthRayMarch>, end_cs: vec3<f32>) {
     let dir = vec4(end_cs - (*raymarch).ray_start_cs, 0.0) * sign(end_cs.z);
     depth_ray_march_to_cs_dir_impl(raymarch, dir, false);
 }
@@ -431,26 +431,26 @@ fn depth_ray_march_to_cs(raymarch: ptr<function, DepthRayMarch>, end_cs: vec3<f3
 /// March towards a clip-space direction. Infinite (ray is extended to cover the whole view frustum).
 ///
 /// Must be called after `from_cs`, as it will clip the world-space ray to the view frustum.
-fn depth_ray_march_to_cs_dir(raymarch: ptr<function, DepthRayMarch>, dir: vec4<f32>) {
+public fn depth_ray_march_to_cs_dir(raymarch: ptr<function, DepthRayMarch>, dir: vec4<f32>) {
     depth_ray_march_to_cs_dir_impl(raymarch, dir, true);
 }
 
 /// March to a world-space position.
 ///
 /// Must be called after `from_cs`, as it will clip the world-space ray to the view frustum.
-fn depth_ray_march_to_ws(raymarch: ptr<function, DepthRayMarch>, end: vec3<f32>) {
+public fn depth_ray_march_to_ws(raymarch: ptr<function, DepthRayMarch>, end: vec3<f32>) {
     depth_ray_march_to_cs(raymarch, position_world_to_ndc(end));
 }
 
 /// March towards a world-space direction. Infinite (ray is extended to cover the whole view frustum).
 ///
 /// Must be called after `from_cs`, as it will clip the world-space ray to the view frustum.
-fn depth_ray_march_to_ws_dir(raymarch: ptr<function, DepthRayMarch>, dir: vec3<f32>) {
+public fn depth_ray_march_to_ws_dir(raymarch: ptr<function, DepthRayMarch>, dir: vec3<f32>) {
     depth_ray_march_to_cs_dir_impl(raymarch, direction_world_to_clip(dir), true);
 }
 
 /// Perform the ray march.
-fn depth_ray_march_march(raymarch: ptr<function, DepthRayMarch>) -> DepthRayMarchResult {
+public fn depth_ray_march_march(raymarch: ptr<function, DepthRayMarch>) -> DepthRayMarchResult {
     var res = DepthRayMarchResult(false, 0.0, vec2(0.0), 0.0, 0.0);
 
     let ray_start_uv = ndc_to_uv((*raymarch).ray_start_cs.xy);

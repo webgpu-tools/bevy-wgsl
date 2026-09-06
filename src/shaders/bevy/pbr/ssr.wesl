@@ -33,10 +33,10 @@ import package::render::view::View;
 import package::pbr::environment_map;
 
 // The texture representing the color framebuffer.
-@group(1) @binding(0) var color_texture: texture_2d<f32>;
+@group(1) @binding(0) public var color_texture: texture_2d<f32>;
 
 // The sampler that lets us sample from the color framebuffer.
-@group(1) @binding(1) var color_sampler: sampler;
+@group(1) @binding(1) public var color_sampler: sampler;
 
 // Group 1, bindings 2 and 3 are in `raymarch.wgsl`.
 
@@ -54,7 +54,7 @@ import package::pbr::environment_map;
 // * `P_world`: The current position in world space.
 //
 // [1]: https://lettier.github.io/3d-game-shaders-for-beginners/screen-space-reflection.html
-fn evaluate_ssr(R_world: vec3<f32>, P_world: vec3<f32>) -> vec4<f32> {
+public fn evaluate_ssr(R_world: vec3<f32>, P_world: vec3<f32>) -> vec4<f32> {
     let depth_size = vec2<f32>(textureDimensions(depth_prepass_texture));
 
     var raymarch = depth_ray_march_new_from_depth(depth_size);
@@ -79,7 +79,7 @@ fn evaluate_ssr(R_world: vec3<f32>, P_world: vec3<f32>) -> vec4<f32> {
 }
 
 @fragment
-fn fragment(in: FullscreenVertexOutput) -> @location(0) vec4<f32> {
+public fn fragment(in: FullscreenVertexOutput) -> @location(0) vec4<f32> {
     // Sample the depth.
     var frag_coord = in.position;
     frag_coord.z = prepass_utils::prepass_depth(in.position, 0u);

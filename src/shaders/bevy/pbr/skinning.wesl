@@ -2,14 +2,14 @@ import package::pbr::mesh_types::SkinnedMesh;
 import package::pbr::mesh_bindings::mesh;
 
 @if(!SKINNED)
-const module_requires_flag_SKINNED = false;
+public const module_requires_flag_SKINNED = false;
 @if(!SKINNED)
 const_assert module_requires_flag_SKINNED; // module requires feature flag SKINNED
 
 @if(SKINS_USE_UNIFORM_BUFFERS)
-@group(1) @binding(1) var<uniform> joint_matrices: SkinnedMesh;
+@group(1) @binding(1) public var<uniform> joint_matrices: SkinnedMesh;
 @else
-@group(1) @binding(1) var<storage> joint_matrices: array<mat4x4<f32>>;
+@group(1) @binding(1) public var<storage> joint_matrices: array<mat4x4<f32>>;
 
 // An array of matrices specifying the joint positions from the previous frame.
 //
@@ -18,11 +18,11 @@ const_assert module_requires_flag_SKINNED; // module requires feature flag SKINN
 // If this is the first frame, or we're otherwise prevented from using data from
 // the previous frame, this is simply the same as `joint_matrices` above.
 @if(SKINS_USE_UNIFORM_BUFFERS)
-@group(1) @binding(6) var<uniform> prev_joint_matrices: SkinnedMesh;
+@group(1) @binding(6) public var<uniform> prev_joint_matrices: SkinnedMesh;
 @else
-@group(1) @binding(6) var<storage> prev_joint_matrices: array<mat4x4<f32>>;
+@group(1) @binding(6) public var<storage> prev_joint_matrices: array<mat4x4<f32>>;
 
-fn skin_model(
+public fn skin_model(
     indexes: vec4<u32>,
     weights: vec4<f32>,
     instance_index: u32,
@@ -46,7 +46,7 @@ fn skin_model(
 // previous frame.
 //
 // This is used for motion vector computation.
-fn skin_prev_model(
+public fn skin_prev_model(
     indexes: vec4<u32>,
     weights: vec4<f32>,
     instance_index: u32,
@@ -67,7 +67,7 @@ fn skin_prev_model(
     }
 }
 
-fn inverse_transpose_3x3m(in: mat3x3<f32>) -> mat3x3<f32> {
+public fn inverse_transpose_3x3m(in: mat3x3<f32>) -> mat3x3<f32> {
     let x = cross(in[1], in[2]);
     let y = cross(in[2], in[0]);
     let z = cross(in[0], in[1]);
@@ -79,7 +79,7 @@ fn inverse_transpose_3x3m(in: mat3x3<f32>) -> mat3x3<f32> {
     );
 }
 
-fn skin_normals(
+public fn skin_normals(
     world_from_local: mat4x4<f32>,
     normal: vec3<f32>,
 ) -> vec3<f32> {

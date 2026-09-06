@@ -4,8 +4,8 @@ import package::pbr::{
 };
 import package::render::maths::PI;
 
-const LAYER_BASE: u32 = 0;
-const LAYER_CLEARCOAT: u32 = 1;
+public const LAYER_BASE: u32 = 0;
+public const LAYER_CLEARCOAT: u32 = 1;
 
 // From the Filament design doc
 // https://google.github.io/filament/Filament.html#table_symbols
@@ -43,7 +43,7 @@ const LAYER_CLEARCOAT: u32 = 1;
 
 // Input to a lighting function for a single layer (either the base layer or the
 // clearcoat layer).
-struct LayerLightingInput {
+public struct LayerLightingInput {
     // The normal vector.
     N: vec3<f32>,
     // The reflected vector.
@@ -59,7 +59,7 @@ struct LayerLightingInput {
 
 // Input to a lighting function (`point_light`, `spot_light`,
 // `directional_light`).
-struct LightingInput {
+public struct LightingInput {
     @if(STANDARD_MATERIAL_CLEARCOAT)
     layers: array<LayerLightingInput, 2>,
     @else
@@ -103,7 +103,7 @@ struct LightingInput {
 }
 
 // Values derived from the `LightingInput` for both diffuse and specular lights.
-struct DerivedLightingInput {
+public struct DerivedLightingInput {
     // The half-vector between L, the incident light vector, and V, the view
     // vector.
     H: vec3<f32>,
@@ -120,7 +120,7 @@ struct DerivedLightingInput {
 //
 // light radius is a non-physical construct for efficiency purposes,
 // because otherwise every light affects every fragment in the scene
-fn getDistanceAttenuation(distanceSquare: f32, inverseRangeSquared: f32) -> f32 {
+public fn getDistanceAttenuation(distanceSquare: f32, inverseRangeSquared: f32) -> f32 {
     let factor = distanceSquare * inverseRangeSquared;
     let smoothFactor = saturate(1.0 - factor * factor);
     let attenuation = smoothFactor * smoothFactor;
@@ -134,7 +134,7 @@ fn getDistanceAttenuation(distanceSquare: f32, inverseRangeSquared: f32) -> f32 
 
 // Simple implementation, has precision problems when using fp16 instead of fp32
 // see https://google.github.io/filament/Filament.html#listing_speculardfp16
-fn D_GGX(roughness: f32, NdotH: f32, h: vec3<f32>) -> f32 {
+public fn D_GGX(roughness: f32, NdotH: f32, h: vec3<f32>) -> f32 {
     let oneMinusNdotHSquared = 1.0 - NdotH * NdotH;
     let a = NdotH * roughness;
     let k = roughness / (oneMinusNdotHSquared + a * a);
@@ -158,7 +158,7 @@ fn D_GGX(roughness: f32, NdotH: f32, h: vec3<f32>) -> f32 {
 //
 // This is from the `KHR_materials_anisotropy` spec:
 // <https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_anisotropy/README.md#individual-lights>
-fn D_GGX_anisotropic(at: f32, ab: f32, NdotH: f32, TdotH: f32, BdotH: f32) -> f32 {
+public fn D_GGX_anisotropic(at: f32, ab: f32, NdotH: f32, TdotH: f32, BdotH: f32) -> f32 {
     let a2 = at * ab;
     let f = vec3(ab * TdotH, at * BdotH, a2 * NdotH);
     let w2 = a2 / dot(f, f);
@@ -173,7 +173,7 @@ fn D_GGX_anisotropic(at: f32, ab: f32, NdotH: f32, TdotH: f32, BdotH: f32) -> f3
 // where
 // V(v,l,α) = 0.5 / { n⋅l sqrt((n⋅v)^2 (1−α2) + α2) + n⋅v sqrt((n⋅l)^2 (1−α2) + α2) }
 // Note the two sqrt's, that may be slow on mobile, see https://google.github.io/filament/Filament.html#listing_approximatedspecularv
-fn V_SmithGGXCorrelated(roughness: f32, NdotV: f32, NdotL: f32) -> f32 {
+public fn V_SmithGGXCorrelated(roughness: f32, NdotV: f32, NdotL: f32) -> f32 {
     let a2 = roughness * roughness;
     let lambdaV = NdotL * sqrt((NdotV - a2 * NdotV) * NdotV + a2);
     let lambdaL = NdotV * sqrt((NdotL - a2 * NdotL) * NdotL + a2);
@@ -182,7 +182,7 @@ fn V_SmithGGXCorrelated(roughness: f32, NdotV: f32, NdotL: f32) -> f32 {
 }
 
 // The visibility function, anisotropic variant.
-fn V_GGX_anisotropic(
+public fn V_GGX_anisotropic(
     at: f32,
     ab: f32,
     NdotL: f32,
@@ -202,24 +202,24 @@ fn V_GGX_anisotropic(
 // clearcoat, per the Filament spec.
 //
 // https://google.github.io/filament/Filament.html#materialsystem/clearcoatmodel#toc4.9.1
-fn V_Kelemen(LdotH: f32) -> f32 {
+public fn V_Kelemen(LdotH: f32) -> f32 {
     return 0.25 / (LdotH * LdotH);
 }
 
 // Fresnel function
 // see https://google.github.io/filament/Filament.html#citation-schlick94
 // F_Schlick(v,h,f_0,f_90) = f_0 + (f_90 − f_0) (1 − v⋅h)^5
-fn F_Schlick_vec(f0: vec3<f32>, f90: f32, VdotH: f32) -> vec3<f32> {
+public fn F_Schlick_vec(f0: vec3<f32>, f90: f32, VdotH: f32) -> vec3<f32> {
     // not using mix to keep the vec3 and float versions identical
     return f0 + (f90 - f0) * pow(1.0 - VdotH, 5.0);
 }
 
-fn F_Schlick(f0: f32, f90: f32, VdotH: f32) -> f32 {
+public fn F_Schlick(f0: f32, f90: f32, VdotH: f32) -> f32 {
     // not using mix to keep the vec3 and float versions identical
     return f0 + (f90 - f0) * pow(1.0 - VdotH, 5.0);
 }
 
-fn fresnel(f0: vec3<f32>, LdotH: f32) -> vec3<f32> {
+public fn fresnel(f0: vec3<f32>, LdotH: f32) -> vec3<f32> {
     // f_90 suitable for ambient occlusion
     // see https://google.github.io/filament/Filament.html#lighting/occlusion
     let f90 = saturate(dot(f0, vec3<f32>(50.0 * 0.33)));
@@ -231,7 +231,7 @@ fn fresnel(f0: vec3<f32>, LdotH: f32) -> vec3<f32> {
 //
 // Multiscattering approximation:
 // <https://google.github.io/filament/Filament.html#listing_energycompensationimpl>
-fn specular_multiscatter(
+public fn specular_multiscatter(
     input: ptr<function, LightingInput>,
     D: f32,
     V: f32,
@@ -251,7 +251,7 @@ fn specular_multiscatter(
 // https://google.github.io/filament/Filament.html#materialsystem/specularbrdf
 
 // N, V, and L must all be normalized.
-fn derive_lighting_input(N: vec3<f32>, V: vec3<f32>, L: vec3<f32>) -> DerivedLightingInput {
+public fn derive_lighting_input(N: vec3<f32>, V: vec3<f32>, L: vec3<f32>) -> DerivedLightingInput {
     var input: DerivedLightingInput;
     var H: vec3<f32> = normalize(L + V);
     input.H = H;
@@ -262,7 +262,7 @@ fn derive_lighting_input(N: vec3<f32>, V: vec3<f32>, L: vec3<f32>) -> DerivedLig
 }
 
 // Returns L in the `xyz` components and the specular intensity in the `w` component.
-fn compute_specular_layer_values_for_point_light(
+public fn compute_specular_layer_values_for_point_light(
     input: ptr<function, LightingInput>,
     layer: u32,
     V: vec3<f32>,
@@ -288,7 +288,7 @@ fn compute_specular_layer_values_for_point_light(
 
 // Cook-Torrance approximation of the microfacet model integration using Fresnel law F to model f_m
 // f_r(v,l) = { D(h,α) G(v,l,α) F(v,h,f0) } / { 4 (n⋅v) (n⋅l) }
-fn specular(
+public fn specular(
     input: ptr<function, LightingInput>,
     derived_input: ptr<function, DerivedLightingInput>,
     specular_intensity: f32,
@@ -323,7 +323,7 @@ fn specular(
 // is unset, because input.layers[1] is out of bounds. Naga will not pass validation if we replace
 // LAYER_CLEARCOAT with its value (1u). So I added the @if here.
 @if(STANDARD_MATERIAL_CLEARCOAT)
-fn specular_clearcoat(
+public fn specular_clearcoat(
     input: ptr<function, LightingInput>,
     derived_input: ptr<function, DerivedLightingInput>,
     clearcoat_strength: f32,
@@ -347,7 +347,7 @@ fn specular_clearcoat(
 }
 
 @if(STANDARD_MATERIAL_ANISOTROPY)
-fn specular_anisotropy(
+public fn specular_anisotropy(
     input: ptr<function, LightingInput>,
     derived_input: ptr<function, DerivedLightingInput>,
     L: vec3<f32>,
@@ -399,7 +399,7 @@ fn specular_anisotropy(
 // Disney approximation
 // See https://google.github.io/filament/Filament.html#citation-burley12
 // minimal quality difference
-fn Fd_Burley(
+public fn Fd_Burley(
     input: ptr<function, LightingInput>,
     derived_input: ptr<function, DerivedLightingInput>,
 ) -> f32 {
@@ -418,7 +418,7 @@ fn Fd_Burley(
 // Scale/bias approximation
 // https://www.unrealengine.com/en-US/blog/physically-based-shading-on-mobile
 // TODO: Use a LUT (more accurate)
-fn F_AB(perceptual_roughness: f32, NdotV: f32) -> vec2<f32> {
+public fn F_AB(perceptual_roughness: f32, NdotV: f32) -> vec2<f32> {
     let c0 = vec4<f32>(-1.0, -0.0275, -0.572, 0.022);
     let c1 = vec4<f32>(1.0, 0.0425, 1.04, -0.04);
     let r = perceptual_roughness * c0 + c1;
@@ -426,11 +426,11 @@ fn F_AB(perceptual_roughness: f32, NdotV: f32) -> vec2<f32> {
     return vec2<f32>(-1.04, 1.04) * a004 + r.zw;
 }
 
-fn EnvBRDFApprox(F0: vec3<f32>, F_ab: vec2<f32>) -> vec3<f32> {
+public fn EnvBRDFApprox(F0: vec3<f32>, F_ab: vec2<f32>) -> vec3<f32> {
     return F0 * F_ab.x + F_ab.y;
 }
 
-fn perceptualRoughnessToRoughness(perceptualRoughness: f32) -> f32 {
+public fn perceptualRoughnessToRoughness(perceptualRoughness: f32) -> f32 {
     // clamp perceptual roughness to prevent precision problems
     // According to Filament design 0.089 is recommended for mobile
     // Filament uses 0.045 for non-mobile
@@ -438,7 +438,7 @@ fn perceptualRoughnessToRoughness(perceptualRoughness: f32) -> f32 {
     return clampedPerceptualRoughness * clampedPerceptualRoughness;
 }
 
-fn point_light(
+public fn point_light(
     light_id: u32,
     input: ptr<function, LightingInput>,
     enable_diffuse: bool
@@ -542,7 +542,7 @@ fn point_light(
         (rangeAttenuation * derived_input.NdotL);
 }
 
-fn spot_light(
+public fn spot_light(
     light_id: u32,
     input: ptr<function, LightingInput>,
     enable_diffuse: bool
@@ -570,7 +570,7 @@ fn spot_light(
     return point_light * spot_attenuation;
 }
 
-fn directional_light(
+public fn directional_light(
     light_id: u32,
     input: ptr<function, LightingInput>,
     enable_diffuse: bool

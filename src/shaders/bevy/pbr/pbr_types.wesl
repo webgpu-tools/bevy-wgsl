@@ -1,6 +1,6 @@
 // Since this is a hot path, try to keep the alignment and size of the struct members in mind.
 // You can find the alignment and sizes at <https://www.w3.org/TR/WGSL/#alignment-and-size>.
-struct StandardMaterial {
+public struct StandardMaterial {
     base_color: vec4<f32>,
     emissive: vec4<f32>,
     attenuation_color: vec4<f32>,
@@ -32,40 +32,40 @@ struct StandardMaterial {
 // NOTE: if these flags are updated or changed. Be sure to also update
 // deferred_flags_from_mesh_material_flags and mesh_material_flags_from_deferred_flags
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-const STANDARD_MATERIAL_FLAGS_BASE_COLOR_TEXTURE_BIT: u32         = 1u;
-const STANDARD_MATERIAL_FLAGS_EMISSIVE_TEXTURE_BIT: u32           = 2u;
-const STANDARD_MATERIAL_FLAGS_METALLIC_ROUGHNESS_TEXTURE_BIT: u32 = 4u;
-const STANDARD_MATERIAL_FLAGS_OCCLUSION_TEXTURE_BIT: u32          = 8u;
-const STANDARD_MATERIAL_FLAGS_DOUBLE_SIDED_BIT: u32               = 16u;
-const STANDARD_MATERIAL_FLAGS_UNLIT_BIT: u32                      = 32u;
-const STANDARD_MATERIAL_FLAGS_TWO_COMPONENT_NORMAL_MAP: u32       = 64u;
-const STANDARD_MATERIAL_FLAGS_FLIP_NORMAL_MAP_Y: u32              = 128u;
-const STANDARD_MATERIAL_FLAGS_FOG_ENABLED_BIT: u32                = 256u;
-const STANDARD_MATERIAL_FLAGS_DEPTH_MAP_BIT: u32                  = 512u;
-const STANDARD_MATERIAL_FLAGS_SPECULAR_TRANSMISSION_TEXTURE_BIT: u32 = 1024u;
-const STANDARD_MATERIAL_FLAGS_THICKNESS_TEXTURE_BIT: u32          = 2048u;
-const STANDARD_MATERIAL_FLAGS_DIFFUSE_TRANSMISSION_TEXTURE_BIT: u32 = 4096u;
-const STANDARD_MATERIAL_FLAGS_ATTENUATION_ENABLED_BIT: u32        = 8192u;
-const STANDARD_MATERIAL_FLAGS_CLEARCOAT_TEXTURE_BIT: u32          = 16384u;
-const STANDARD_MATERIAL_FLAGS_CLEARCOAT_ROUGHNESS_TEXTURE_BIT: u32 = 32768u;
-const STANDARD_MATERIAL_FLAGS_CLEARCOAT_NORMAL_TEXTURE_BIT: u32   = 65536u;
-const STANDARD_MATERIAL_FLAGS_ANISOTROPY_TEXTURE_BIT: u32         = 131072u;
-const STANDARD_MATERIAL_FLAGS_SPECULAR_TEXTURE_BIT: u32           = 262144u;
-const STANDARD_MATERIAL_FLAGS_SPECULAR_TINT_TEXTURE_BIT: u32      = 524288u;
-const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_RESERVED_BITS: u32       = 3758096384u; // (0b111u32 << 29)
-const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_OPAQUE: u32              = 0u;          // (0u32 << 29)
-const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_MASK: u32                = 536870912u;  // (1u32 << 29)
-const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_BLEND: u32               = 1073741824u; // (2u32 << 29)
-const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_PREMULTIPLIED: u32       = 1610612736u; // (3u32 << 29)
-const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_ADD: u32                 = 2147483648u; // (4u32 << 29)
-const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_MULTIPLY: u32            = 2684354560u; // (5u32 << 29)
-const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_ALPHA_TO_COVERAGE: u32   = 3221225472u; // (6u32 << 29)
+public const STANDARD_MATERIAL_FLAGS_BASE_COLOR_TEXTURE_BIT: u32         = 1u;
+public const STANDARD_MATERIAL_FLAGS_EMISSIVE_TEXTURE_BIT: u32           = 2u;
+public const STANDARD_MATERIAL_FLAGS_METALLIC_ROUGHNESS_TEXTURE_BIT: u32 = 4u;
+public const STANDARD_MATERIAL_FLAGS_OCCLUSION_TEXTURE_BIT: u32          = 8u;
+public const STANDARD_MATERIAL_FLAGS_DOUBLE_SIDED_BIT: u32               = 16u;
+public const STANDARD_MATERIAL_FLAGS_UNLIT_BIT: u32                      = 32u;
+public const STANDARD_MATERIAL_FLAGS_TWO_COMPONENT_NORMAL_MAP: u32       = 64u;
+public const STANDARD_MATERIAL_FLAGS_FLIP_NORMAL_MAP_Y: u32              = 128u;
+public const STANDARD_MATERIAL_FLAGS_FOG_ENABLED_BIT: u32                = 256u;
+public const STANDARD_MATERIAL_FLAGS_DEPTH_MAP_BIT: u32                  = 512u;
+public const STANDARD_MATERIAL_FLAGS_SPECULAR_TRANSMISSION_TEXTURE_BIT: u32 = 1024u;
+public const STANDARD_MATERIAL_FLAGS_THICKNESS_TEXTURE_BIT: u32          = 2048u;
+public const STANDARD_MATERIAL_FLAGS_DIFFUSE_TRANSMISSION_TEXTURE_BIT: u32 = 4096u;
+public const STANDARD_MATERIAL_FLAGS_ATTENUATION_ENABLED_BIT: u32        = 8192u;
+public const STANDARD_MATERIAL_FLAGS_CLEARCOAT_TEXTURE_BIT: u32          = 16384u;
+public const STANDARD_MATERIAL_FLAGS_CLEARCOAT_ROUGHNESS_TEXTURE_BIT: u32 = 32768u;
+public const STANDARD_MATERIAL_FLAGS_CLEARCOAT_NORMAL_TEXTURE_BIT: u32   = 65536u;
+public const STANDARD_MATERIAL_FLAGS_ANISOTROPY_TEXTURE_BIT: u32         = 131072u;
+public const STANDARD_MATERIAL_FLAGS_SPECULAR_TEXTURE_BIT: u32           = 262144u;
+public const STANDARD_MATERIAL_FLAGS_SPECULAR_TINT_TEXTURE_BIT: u32      = 524288u;
+public const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_RESERVED_BITS: u32       = 3758096384u; // (0b111u32 << 29)
+public const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_OPAQUE: u32              = 0u;          // (0u32 << 29)
+public const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_MASK: u32                = 536870912u;  // (1u32 << 29)
+public const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_BLEND: u32               = 1073741824u; // (2u32 << 29)
+public const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_PREMULTIPLIED: u32       = 1610612736u; // (3u32 << 29)
+public const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_ADD: u32                 = 2147483648u; // (4u32 << 29)
+public const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_MULTIPLY: u32            = 2684354560u; // (5u32 << 29)
+public const STANDARD_MATERIAL_FLAGS_ALPHA_MODE_ALPHA_TO_COVERAGE: u32   = 3221225472u; // (6u32 << 29)
 // ↑ To calculate/verify the values above, use the following playground:
 // https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=7792f8dd6fc6a8d4d0b6b1776898a7f4
 
 
 // Creates a StandardMaterial with default values
-fn standard_material_new() -> StandardMaterial {
+public fn standard_material_new() -> StandardMaterial {
     var material: StandardMaterial;
 
     // NOTE: Keep in-sync with src/pbr_material.rs!
@@ -94,7 +94,7 @@ fn standard_material_new() -> StandardMaterial {
     return material;
 }
 
-struct PbrInput {
+public struct PbrInput {
     material: StandardMaterial,
     // Note: this gets monochromized upon deferred PbrInput reconstruction.
     diffuse_occlusion: vec3<f32>,
@@ -122,7 +122,7 @@ struct PbrInput {
 };
 
 // Creates a PbrInput with default values
-fn pbr_input_new() -> PbrInput {
+public fn pbr_input_new() -> PbrInput {
     var pbr_input: PbrInput;
 
     pbr_input.material = standard_material_new();

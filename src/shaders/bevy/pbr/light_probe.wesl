@@ -4,7 +4,7 @@ import package::pbr::mesh_view_bindings::light_probes;
 import package::pbr::mesh_view_types::LightProbe;
 
 // The result of searching for a light probe.
-struct LightProbeQueryResult {
+public struct LightProbeQueryResult {
     // The index of the light probe texture or textures in the binding array or
     // arrays.
     texture_index: i32,
@@ -18,7 +18,7 @@ struct LightProbeQueryResult {
     affects_lightmapped_mesh_diffuse: bool,
 };
 
-fn transpose_affine_matrix(matrix: mat3x4<f32>) -> mat4x4<f32> {
+public fn transpose_affine_matrix(matrix: mat3x4<f32>) -> mat4x4<f32> {
     let matrix4x4 = mat4x4<f32>(
         matrix[0],
         matrix[1],
@@ -35,7 +35,7 @@ fn transpose_affine_matrix(matrix: mat3x4<f32>) -> mat4x4<f32> {
 //
 // TODO: Interpolate between multiple light probes.
 @if(AVAILABLE_STORAGE_BUFFER_BINDINGS__GE_3)
-fn query_light_probe(
+public fn query_light_probe(
     world_position: vec3<f32>,
     is_irradiance_volume: bool,
     clusterable_object_index_ranges: ptr<function, ClusterableObjectIndexRanges>,
@@ -97,7 +97,7 @@ fn query_light_probe(
 // lack bindless shaders, there will usually only be one of each type of light
 // probe present anyway.
 @else
-fn query_light_probe(
+public fn query_light_probe(
     world_position: vec3<f32>,
     is_irradiance_volume: bool,
     clusterable_object_index_ranges: ptr<function, ClusterableObjectIndexRanges>,

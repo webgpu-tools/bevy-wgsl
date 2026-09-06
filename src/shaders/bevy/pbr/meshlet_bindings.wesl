@@ -3,7 +3,7 @@ import package::render::view::View;
 import package::pbr::prepass_bindings::PreviousViewUniforms;
 import package::pbr::utils::octahedral_decode_signed;
 
-struct Meshlet {
+public struct Meshlet {
     start_vertex_position_bit: u32,
     start_vertex_attribute_id: u32,
     start_index_id: u32,
@@ -14,86 +14,86 @@ struct Meshlet {
     min_vertex_position_channel_z: f32,
 }
 
-fn get_meshlet_vertex_count(meshlet: ptr<function, Meshlet>) -> u32 {
+public fn get_meshlet_vertex_count(meshlet: ptr<function, Meshlet>) -> u32 {
     return extractBits((*meshlet).packed_a, 0u, 8u);
 }
 
-fn get_meshlet_triangle_count(meshlet: ptr<function, Meshlet>) -> u32 {
+public fn get_meshlet_triangle_count(meshlet: ptr<function, Meshlet>) -> u32 {
     return extractBits((*meshlet).packed_a, 8u, 8u);
 }
 
-struct MeshletBoundingSpheres {
+public struct MeshletBoundingSpheres {
     culling_sphere: MeshletBoundingSphere,
     lod_group_sphere: MeshletBoundingSphere,
     lod_parent_group_sphere: MeshletBoundingSphere,
 }
 
-struct MeshletBoundingSphere {
+public struct MeshletBoundingSphere {
     center: vec3<f32>,
     radius: f32,
 }
 
-struct DispatchIndirectArgs {
+public struct DispatchIndirectArgs {
     x: atomic<u32>,
     y: u32,
     z: u32,
 }
 
-struct DrawIndirectArgs {
+public struct DrawIndirectArgs {
     vertex_count: u32,
     instance_count: atomic<u32>,
     first_vertex: u32,
     first_instance: u32,
 }
 
-const CENTIMETERS_PER_METER = 100.0;
+public const CENTIMETERS_PER_METER = 100.0;
 
 @if(MESHLET_FILL_CLUSTER_BUFFERS_PASS)
-var<immediate> scene_instance_count: u32;
+public var<immediate> scene_instance_count: u32;
 @if(MESHLET_FILL_CLUSTER_BUFFERS_PASS)
-@group(0) @binding(0) var<storage, read> meshlet_instance_meshlet_counts: array<u32>; // Per entity instance
+@group(0) @binding(0) public var<storage, read> meshlet_instance_meshlet_counts: array<u32>; // Per entity instance
 @if(MESHLET_FILL_CLUSTER_BUFFERS_PASS)
-@group(0) @binding(1) var<storage, read> meshlet_instance_meshlet_slice_starts: array<u32>; // Per entity instance
+@group(0) @binding(1) public var<storage, read> meshlet_instance_meshlet_slice_starts: array<u32>; // Per entity instance
 @if(MESHLET_FILL_CLUSTER_BUFFERS_PASS)
-@group(0) @binding(2) var<storage, read_write> meshlet_cluster_instance_ids: array<u32>; // Per cluster
+@group(0) @binding(2) public var<storage, read_write> meshlet_cluster_instance_ids: array<u32>; // Per cluster
 @if(MESHLET_FILL_CLUSTER_BUFFERS_PASS)
-@group(0) @binding(3) var<storage, read_write> meshlet_cluster_meshlet_ids: array<u32>; // Per cluster
+@group(0) @binding(3) public var<storage, read_write> meshlet_cluster_meshlet_ids: array<u32>; // Per cluster
 @if(MESHLET_FILL_CLUSTER_BUFFERS_PASS)
-@group(0) @binding(4) var<storage, read_write> meshlet_global_cluster_count: atomic<u32>; // Single object shared between all workgroups
+@group(0) @binding(4) public var<storage, read_write> meshlet_global_cluster_count: atomic<u32>; // Single object shared between all workgroups
 
 @if(MESHLET_CULLING_PASS)
-struct Constants { scene_cluster_count: u32, meshlet_raster_cluster_rightmost_slot: u32 }
+public struct Constants { scene_cluster_count: u32, meshlet_raster_cluster_rightmost_slot: u32 }
 @if(MESHLET_CULLING_PASS)
-var<immediate> constants: Constants;
+public var<immediate> constants: Constants;
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(0) var<storage, read> meshlet_cluster_meshlet_ids: array<u32>; // Per cluster
+@group(0) @binding(0) public var<storage, read> meshlet_cluster_meshlet_ids: array<u32>; // Per cluster
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(1) var<storage, read> meshlet_bounding_spheres: array<MeshletBoundingSpheres>; // Per meshlet
+@group(0) @binding(1) public var<storage, read> meshlet_bounding_spheres: array<MeshletBoundingSpheres>; // Per meshlet
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(2) var<storage, read> meshlet_simplification_errors: array<u32>; // Per meshlet
+@group(0) @binding(2) public var<storage, read> meshlet_simplification_errors: array<u32>; // Per meshlet
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(3) var<storage, read> meshlet_cluster_instance_ids: array<u32>; // Per cluster
+@group(0) @binding(3) public var<storage, read> meshlet_cluster_instance_ids: array<u32>; // Per cluster
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(4) var<storage, read> meshlet_instance_uniforms: array<Mesh>; // Per entity instance
+@group(0) @binding(4) public var<storage, read> meshlet_instance_uniforms: array<Mesh>; // Per entity instance
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(5) var<storage, read> meshlet_view_instance_visibility: array<u32>; // 1 bit per entity instance, packed as a bitmask
+@group(0) @binding(5) public var<storage, read> meshlet_view_instance_visibility: array<u32>; // 1 bit per entity instance, packed as a bitmask
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(6) var<storage, read_write> meshlet_second_pass_candidates: array<atomic<u32>>; // 1 bit per cluster , packed as a bitmask
+@group(0) @binding(6) public var<storage, read_write> meshlet_second_pass_candidates: array<atomic<u32>>; // 1 bit per cluster , packed as a bitmask
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(7) var<storage, read_write> meshlet_software_raster_indirect_args: DispatchIndirectArgs; // Single object shared between all workgroups
+@group(0) @binding(7) public var<storage, read_write> meshlet_software_raster_indirect_args: DispatchIndirectArgs; // Single object shared between all workgroups
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(8) var<storage, read_write> meshlet_hardware_raster_indirect_args: DrawIndirectArgs; // Single object shared between all workgroups
+@group(0) @binding(8) public var<storage, read_write> meshlet_hardware_raster_indirect_args: DrawIndirectArgs; // Single object shared between all workgroups
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(9) var<storage, read_write> meshlet_raster_clusters: array<u32>; // Single object shared between all workgroups
+@group(0) @binding(9) public var<storage, read_write> meshlet_raster_clusters: array<u32>; // Single object shared between all workgroups
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(10) var depth_pyramid: texture_2d<f32>; // From the end of the last frame for the first culling pass, and from the first raster pass for the second culling pass
+@group(0) @binding(10) public var depth_pyramid: texture_2d<f32>; // From the end of the last frame for the first culling pass, and from the first raster pass for the second culling pass
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(11) var<uniform> view: View;
+@group(0) @binding(11) public var<uniform> view: View;
 @if(MESHLET_CULLING_PASS)
-@group(0) @binding(12) var<uniform> previous_view: PreviousViewUniforms;
+@group(0) @binding(12) public var<uniform> previous_view: PreviousViewUniforms;
 
 @if(MESHLET_CULLING_PASS)
-fn should_cull_instance(instance_id: u32) -> bool {
+public fn should_cull_instance(instance_id: u32) -> bool {
     let bit_offset = instance_id % 32u;
     let packed_visibility = meshlet_view_instance_visibility[instance_id / 32u];
     return bool(extractBits(packed_visibility, bit_offset, 1u));
@@ -101,45 +101,45 @@ fn should_cull_instance(instance_id: u32) -> bool {
 
 // TODO: Load 4x per workgroup instead of once per thread?
 @if(MESHLET_CULLING_PASS)
-fn cluster_is_second_pass_candidate(cluster_id: u32) -> bool {
+public fn cluster_is_second_pass_candidate(cluster_id: u32) -> bool {
     let packed_candidates = meshlet_second_pass_candidates[cluster_id / 32u];
     let bit_offset = cluster_id % 32u;
     return bool(extractBits(packed_candidates, bit_offset, 1u));
 }
 
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-@group(0) @binding(0) var<storage, read> meshlet_cluster_meshlet_ids: array<u32>; // Per cluster
+@group(0) @binding(0) public var<storage, read> meshlet_cluster_meshlet_ids: array<u32>; // Per cluster
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-@group(0) @binding(1) var<storage, read> meshlets: array<Meshlet>; // Per meshlet
+@group(0) @binding(1) public var<storage, read> meshlets: array<Meshlet>; // Per meshlet
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-@group(0) @binding(2) var<storage, read> meshlet_indices: array<u32>; // Many per meshlet
+@group(0) @binding(2) public var<storage, read> meshlet_indices: array<u32>; // Many per meshlet
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-@group(0) @binding(3) var<storage, read> meshlet_vertex_positions: array<u32>; // Many per meshlet
+@group(0) @binding(3) public var<storage, read> meshlet_vertex_positions: array<u32>; // Many per meshlet
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-@group(0) @binding(4) var<storage, read> meshlet_cluster_instance_ids: array<u32>; // Per cluster
+@group(0) @binding(4) public var<storage, read> meshlet_cluster_instance_ids: array<u32>; // Per cluster
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-@group(0) @binding(5) var<storage, read> meshlet_instance_uniforms: array<Mesh>; // Per entity instance
+@group(0) @binding(5) public var<storage, read> meshlet_instance_uniforms: array<Mesh>; // Per entity instance
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-@group(0) @binding(6) var<storage, read> meshlet_raster_clusters: array<u32>; // Single object shared between all workgroups
+@group(0) @binding(6) public var<storage, read> meshlet_raster_clusters: array<u32>; // Single object shared between all workgroups
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-@group(0) @binding(7) var<storage, read> meshlet_software_raster_cluster_count: u32;
+@group(0) @binding(7) public var<storage, read> meshlet_software_raster_cluster_count: u32;
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS && MESHLET_VISIBILITY_BUFFER_RASTER_PASS_OUTPUT)
-@group(0) @binding(8) var meshlet_visibility_buffer: texture_storage_2d<r64uint, atomic>;
+@group(0) @binding(8) public var meshlet_visibility_buffer: texture_storage_2d<r64uint, atomic>;
 @elif(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-@group(0) @binding(8) var meshlet_visibility_buffer: texture_storage_2d<r32uint, atomic>;
+@group(0) @binding(8) public var meshlet_visibility_buffer: texture_storage_2d<r32uint, atomic>;
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-@group(0) @binding(9) var<uniform> view: View;
+@group(0) @binding(9) public var<uniform> view: View;
 
 // TODO: Load only twice, instead of 3x in cases where you load 3 indices per thread?
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-fn get_meshlet_vertex_id(index_id: u32) -> u32 {
+public fn get_meshlet_vertex_id(index_id: u32) -> u32 {
     let packed_index = meshlet_indices[index_id / 4u];
     let bit_offset = (index_id % 4u) * 8u;
     return extractBits(packed_index, bit_offset, 8u);
 }
 
 @if(MESHLET_VISIBILITY_BUFFER_RASTER_PASS)
-fn get_meshlet_vertex_position(meshlet: ptr<function, Meshlet>, vertex_id: u32) -> vec3<f32> {
+public fn get_meshlet_vertex_position(meshlet: ptr<function, Meshlet>, vertex_id: u32) -> vec3<f32> {
     // Get bitstream start for the vertex
     let unpacked = unpack4xU8((*meshlet).packed_b);
     let bits_per_channel = unpacked.xyz;
@@ -174,34 +174,34 @@ fn get_meshlet_vertex_position(meshlet: ptr<function, Meshlet>, vertex_id: u32) 
 }
 
 @if(MESHLET_MESH_MATERIAL_PASS)
-@group(1) @binding(0) var meshlet_visibility_buffer: texture_storage_2d<r64uint, read>;
+@group(1) @binding(0) public var meshlet_visibility_buffer: texture_storage_2d<r64uint, read>;
 @if(MESHLET_MESH_MATERIAL_PASS)
-@group(1) @binding(1) var<storage, read> meshlet_cluster_meshlet_ids: array<u32>; // Per cluster
+@group(1) @binding(1) public var<storage, read> meshlet_cluster_meshlet_ids: array<u32>; // Per cluster
 @if(MESHLET_MESH_MATERIAL_PASS)
-@group(1) @binding(2) var<storage, read> meshlets: array<Meshlet>; // Per meshlet
+@group(1) @binding(2) public var<storage, read> meshlets: array<Meshlet>; // Per meshlet
 @if(MESHLET_MESH_MATERIAL_PASS)
-@group(1) @binding(3) var<storage, read> meshlet_indices: array<u32>; // Many per meshlet
+@group(1) @binding(3) public var<storage, read> meshlet_indices: array<u32>; // Many per meshlet
 @if(MESHLET_MESH_MATERIAL_PASS)
-@group(1) @binding(4) var<storage, read> meshlet_vertex_positions: array<u32>; // Many per meshlet
+@group(1) @binding(4) public var<storage, read> meshlet_vertex_positions: array<u32>; // Many per meshlet
 @if(MESHLET_MESH_MATERIAL_PASS)
-@group(1) @binding(5) var<storage, read> meshlet_vertex_normals: array<u32>; // Many per meshlet
+@group(1) @binding(5) public var<storage, read> meshlet_vertex_normals: array<u32>; // Many per meshlet
 @if(MESHLET_MESH_MATERIAL_PASS)
-@group(1) @binding(6) var<storage, read> meshlet_vertex_uvs: array<vec2<f32>>; // Many per meshlet
+@group(1) @binding(6) public var<storage, read> meshlet_vertex_uvs: array<vec2<f32>>; // Many per meshlet
 @if(MESHLET_MESH_MATERIAL_PASS)
-@group(1) @binding(7) var<storage, read> meshlet_cluster_instance_ids: array<u32>; // Per cluster
+@group(1) @binding(7) public var<storage, read> meshlet_cluster_instance_ids: array<u32>; // Per cluster
 @if(MESHLET_MESH_MATERIAL_PASS)
-@group(1) @binding(8) var<storage, read> meshlet_instance_uniforms: array<Mesh>; // Per entity instance
+@group(1) @binding(8) public var<storage, read> meshlet_instance_uniforms: array<Mesh>; // Per entity instance
 
 // TODO: Load only twice, instead of 3x in cases where you load 3 indices per thread?
 @if(MESHLET_MESH_MATERIAL_PASS)
-fn get_meshlet_vertex_id(index_id: u32) -> u32 {
+public fn get_meshlet_vertex_id(index_id: u32) -> u32 {
     let packed_index = meshlet_indices[index_id / 4u];
     let bit_offset = (index_id % 4u) * 8u;
     return extractBits(packed_index, bit_offset, 8u);
 }
 
 @if(MESHLET_MESH_MATERIAL_PASS)
-fn get_meshlet_vertex_position(meshlet: ptr<function, Meshlet>, vertex_id: u32) -> vec3<f32> {
+public fn get_meshlet_vertex_position(meshlet: ptr<function, Meshlet>, vertex_id: u32) -> vec3<f32> {
     // Get bitstream start for the vertex
     let unpacked = unpack4xU8((*meshlet).packed_b);
     let bits_per_channel = unpacked.xyz;
@@ -236,12 +236,12 @@ fn get_meshlet_vertex_position(meshlet: ptr<function, Meshlet>, vertex_id: u32) 
 }
 
 @if(MESHLET_MESH_MATERIAL_PASS)
-fn get_meshlet_vertex_normal(meshlet: ptr<function, Meshlet>, vertex_id: u32) -> vec3<f32> {
+public fn get_meshlet_vertex_normal(meshlet: ptr<function, Meshlet>, vertex_id: u32) -> vec3<f32> {
     let packed_normal = meshlet_vertex_normals[(*meshlet).start_vertex_attribute_id + vertex_id];
     return octahedral_decode_signed(unpack2x16snorm(packed_normal));
 }
 
 @if(MESHLET_MESH_MATERIAL_PASS)
-fn get_meshlet_vertex_uv(meshlet: ptr<function, Meshlet>, vertex_id: u32) -> vec2<f32> {
+public fn get_meshlet_vertex_uv(meshlet: ptr<function, Meshlet>, vertex_id: u32) -> vec2<f32> {
     return meshlet_vertex_uvs[(*meshlet).start_vertex_attribute_id + vertex_id];
 }

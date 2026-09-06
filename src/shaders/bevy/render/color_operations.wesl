@@ -6,7 +6,7 @@ import package::render::maths::FRAC_PI_3;
 // Output: R ∈ [0, 1], G ∈ [0, 1], B ∈ [0, 1].
 //
 // <https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_RGB_alternative>
-fn hsv_to_rgb(hsv: vec3<f32>) -> vec3<f32> {
+public fn hsv_to_rgb(hsv: vec3<f32>) -> vec3<f32> {
     let n = vec3(5.0, 3.0, 1.0);
     let k = (n + hsv.x / FRAC_PI_3) % 6.0;
     return hsv.z - hsv.z * hsv.y * max(vec3(0.0), min(k, min(4.0 - k, vec3(1.0))));
@@ -18,7 +18,7 @@ fn hsv_to_rgb(hsv: vec3<f32>) -> vec3<f32> {
 // Output: H ∈ [0, 2π), S ∈ [0, 1], V ∈ [0, 1].
 //
 // <https://en.wikipedia.org/wiki/HSL_and_HSV#From_RGB>
-fn rgb_to_hsv(rgb: vec3<f32>) -> vec3<f32> {
+public fn rgb_to_hsv(rgb: vec3<f32>) -> vec3<f32> {
     let x_max = max(rgb.r, max(rgb.g, rgb.b));  // i.e. V
     let x_min = min(rgb.r, min(rgb.g, rgb.b));
     let c = x_max - x_min;  // chroma

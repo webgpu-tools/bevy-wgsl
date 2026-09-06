@@ -12,9 +12,9 @@ import package::render::{
     maths::PI_2
 };
 
-const flip_z: vec3<f32> = vec3<f32>(1.0, 1.0, -1.0);
+public const flip_z: vec3<f32> = vec3<f32>(1.0, 1.0, -1.0);
 
-fn fetch_point_shadow(light_id: u32, frag_position: vec4<f32>, surface_normal: vec3<f32>) -> f32 {
+public fn fetch_point_shadow(light_id: u32, frag_position: vec4<f32>, surface_normal: vec3<f32>) -> f32 {
     let light = &view_bindings::clusterable_objects.data[light_id];
 
     // because the shadow maps align with the axes and the frustum planes are at 45 degrees
@@ -60,7 +60,7 @@ fn fetch_point_shadow(light_id: u32, frag_position: vec4<f32>, surface_normal: v
     return sample_shadow_cubemap(frag_ls * flip_z, distance_to_light, depth, light_id);
 }
 
-fn fetch_spot_shadow(
+public fn fetch_spot_shadow(
     light_id: u32,
     frag_position: vec4<f32>,
     surface_normal: vec3<f32>,
@@ -122,7 +122,7 @@ fn fetch_spot_shadow(
     return sample_shadow_map(shadow_uv, depth, array_index, SPOT_SHADOW_TEXEL_SIZE);
 }
 
-fn get_cascade_index(light_id: u32, view_z: f32) -> u32 {
+public fn get_cascade_index(light_id: u32, view_z: f32) -> u32 {
     let light = &view_bindings::lights.directional_lights[light_id];
 
     for (var i: u32 = 0u; i < (*light).num_cascades; i = i + 1u) {
@@ -137,7 +137,7 @@ fn get_cascade_index(light_id: u32, view_z: f32) -> u32 {
 //
 // The depth is stored in the return value's z coordinate. If the return value's
 // w coordinate is 0.0, then we landed outside the shadow map entirely.
-fn world_to_directional_light_local(
+public fn world_to_directional_light_local(
     light_id: u32,
     cascade_index: u32,
     offset_position: vec4<f32>
@@ -166,7 +166,7 @@ fn world_to_directional_light_local(
     return vec4(light_local, depth, 1.0);
 }
 
-fn sample_directional_cascade(
+public fn sample_directional_cascade(
     light_id: u32,
     cascade_index: u32,
     frag_position: vec4<f32>,
@@ -197,7 +197,7 @@ fn sample_directional_cascade(
     return sample_shadow_map(light_local.xy, light_local.z, array_index, texel_size);
 }
 
-fn fetch_directional_shadow(light_id: u32, frag_position: vec4<f32>, surface_normal: vec3<f32>, view_z: f32) -> f32 {
+public fn fetch_directional_shadow(light_id: u32, frag_position: vec4<f32>, surface_normal: vec3<f32>, view_z: f32) -> f32 {
     let light = &view_bindings::lights.directional_lights[light_id];
     let cascade_index = get_cascade_index(light_id, view_z);
 
@@ -220,7 +220,7 @@ fn fetch_directional_shadow(light_id: u32, frag_position: vec4<f32>, surface_nor
     return shadow;
 }
 
-fn cascade_debug_visualization(
+public fn cascade_debug_visualization(
     output_color: vec3<f32>,
     light_id: u32,
     view_z: f32,
