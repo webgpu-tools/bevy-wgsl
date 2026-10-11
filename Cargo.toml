@@ -12,7 +12,7 @@ members = ["examples/builder", "examples/consumer"]
 wesl-core = { version = "0.1.0" }
 
 [build-dependencies]
-wesl = { version = "0.6.0", features = ["eval", "naga-ext", "package"] }
+wesl = { version = "0.6.0", features = ["naga-ext", "package"] }
 
 [patch.crates-io]
 wesl = { path = "../wesl-rs/crates/wesl" }
